@@ -6,6 +6,7 @@ Release: 1.p24.3
 Source0: http://pyopenssl.sf.net/%{name}-%{version}.tar.gz
 Patch0: pyOpenSSL-0.5.1-openssl097.patch
 Patch2: pyOpenSSL-elinks.patch
+Patch3: pyOpenSSL-nopdfout.patch
 License: LGPL
 Group: Development/Libraries
 BuildRoot: %{_tmppath}/%{name}-buildroot
@@ -26,6 +27,7 @@ High-level wrapper around a subset of the OpenSSL library, includes
 %setup -q
 %patch0 -p1 -b .openssl097
 %patch2 -p1 -b .elinks
+%patch3 -p1 -b .nopdfout
 
 %build
 %{__python} setup.py build
