@@ -2,17 +2,18 @@
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
 Version: 0.5.1
-Release: 11
+Release: 20
 Source0: %{name}-%{version}.tar.gz
 Patch0: pyOpenSSL-0.5.1-openssl097.patch
 Patch1: pyOpenSSL-0.5.1-extraflags.patch
+Patch1: pyOpenSSL-elinks.patch
 License: LGPL
 Group: Development/Libraries
 BuildRoot: %{_tmppath}/%{name}-buildroot
 Prefix: %{_prefix}
 Url: http://pyopenssl.sourceforge.net/
 Requires: python
-BuildRequires: lynx openssl-devel python-devel perl tetex-dvips tetex-latex
+BuildRequires: elinks openssl-devel python-devel perl tetex-dvips tetex-latex
 
 %description
 High-level wrapper around a subset of the OpenSSL library, includes
@@ -53,6 +54,13 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Wed Nov  5 2003 Mihai Ibanescu <misa@redhat.com> 0.5.1-20
+- rebuilt against python 2.3.2
+
+* Fri Aug  8 2003 Mihai Ibanescu <misa@redhat.com> 0.5.1-12
+- lynx no longer supported, using elinks instead (patch from
+  Michael Redinger <michael.redinger@uibk.ac.at>, bug #101947 )
+
 * Wed Jun  4 2003 Elliot Lee <sopwith@redhat.com> 0.5.1-11
 - Rebuilt
 
