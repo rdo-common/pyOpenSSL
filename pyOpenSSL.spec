@@ -1,12 +1,11 @@
 %define __python /usr/bin/python2
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
-Version: 0.5.1
-Release: 24
-Source0: %{name}-%{version}.tar.gz
+Version: 0.6
+Release: 1.p23
+Source0: http://pyopenssl.sf.net/%{name}-%{version}.tar.gz
 Patch0: pyOpenSSL-0.5.1-openssl097.patch
-Patch1: pyOpenSSL-0.5.1-extraflags.patch
-Patch1: pyOpenSSL-elinks.patch
+Patch2: pyOpenSSL-elinks.patch
 License: LGPL
 Group: Development/Libraries
 BuildRoot: %{_tmppath}/%{name}-buildroot
@@ -26,7 +25,7 @@ High-level wrapper around a subset of the OpenSSL library, includes
 %prep
 %setup -q
 %patch0 -p1 -b .openssl097
-%patch1 -p1 -b .extraflags
+%patch2 -p1 -b .elinks
 
 %build
 %{__python} setup.py build
@@ -54,6 +53,12 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Fri Aug 13 2004 Mihai Ibanescu <misa@redhat.com> 0.6-1
+- 0.6 is out
+
+* Tue Aug 10 2004 Mihai Ibanescu <misa@redhat.com> 0.6-0.90.rc1
+- release candidate
+
 * Thu Jun 24 2004 Mihai Ibanescu <misa@redhat.com> 0.5.1-24
 - rebuilt
 
