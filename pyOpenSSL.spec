@@ -1,7 +1,8 @@
+%define __python /usr/bin/python2
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
 Version: 0.5.1
-Release: 8
+Release: 11
 Source0: %{name}-%{version}.tar.gz
 Patch0: pyOpenSSL-0.5.1-openssl097.patch
 Patch1: pyOpenSSL-0.5.1-extraflags.patch
@@ -10,6 +11,7 @@ Group: Development/Libraries
 BuildRoot: %{_tmppath}/%{name}-buildroot
 Prefix: %{_prefix}
 Url: http://pyopenssl.sourceforge.net/
+Requires: python
 BuildRequires: lynx openssl-devel python-devel perl tetex-dvips tetex-latex
 
 %description
@@ -51,6 +53,15 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Wed Jun  4 2003 Elliot Lee <sopwith@redhat.com> 0.5.1-11
+- Rebuilt
+
+* Wed Jun  4 2003 Mihai Ibanescu <misa@redhat.com> 0.5.1-10.7.x
+- Built on 7.x
+
+* Mon Mar  3 2003 Mihai Ibanescu <misa@redhat.com> 0.5.1-9
+- bug #73967: Added Requires: python 
+
 * Mon Feb 24 2003 Elliot Lee <sopwith@redhat.com>
 - rebuilt
 
