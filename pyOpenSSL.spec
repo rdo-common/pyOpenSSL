@@ -2,7 +2,7 @@
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
 Version: 0.5.1
-Release: 21.1
+Release: 24
 Source0: %{name}-%{version}.tar.gz
 Patch0: pyOpenSSL-0.5.1-openssl097.patch
 Patch1: pyOpenSSL-0.5.1-extraflags.patch
@@ -54,6 +54,15 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Thu Jun 24 2004 Mihai Ibanescu <misa@redhat.com> 0.5.1-24
+- rebuilt
+
+* Mon Jun 21 2004 Mihai Ibanescu <misa@redhat.com> 0.5.1-23
+- rebuilt
+
+* Tue Jun 15 2004 Elliot Lee <sopwith@redhat.com>
+- rebuilt
+
 * Tue Mar 02 2004 Elliot Lee <sopwith@redhat.com>
 - rebuilt
 
