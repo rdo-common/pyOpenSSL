@@ -2,7 +2,7 @@
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
 Version: 0.6
-Release: 1.p24.4
+Release: 1.p24.5
 Source0: http://pyopenssl.sf.net/%{name}-%{version}.tar.gz
 Patch0: pyOpenSSL-0.5.1-openssl097.patch
 Patch2: pyOpenSSL-elinks.patch
@@ -48,6 +48,7 @@ cat INSTALLED_FILES INSTALLED_DIRS > INSTALLED_OBJECTS
 rm -rf $RPM_BUILD_ROOT
 
 %files -f INSTALLED_OBJECTS
+/usr/lib/python2.4/site-packages/OpenSSL/*.pyo
 %defattr(-,root,root)
 %doc README doc/pyOpenSSL.ps 
 %ifarch i386
@@ -55,6 +56,9 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Wed Aug 03 2005 Karsten Hopp <karsten@redhat.de> 0.6-1.p24.5
+- current rpm creates .pyo files, include them in filelist
+
 * Thu Mar 17 2005 Mihai Ibanescu <misa@redhat.com> 0.6-1.p24.4
 - rebuilt
 
