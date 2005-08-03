@@ -48,7 +48,7 @@ cat INSTALLED_FILES INSTALLED_DIRS > INSTALLED_OBJECTS
 rm -rf $RPM_BUILD_ROOT
 
 %files -f INSTALLED_OBJECTS
-/usr/lib/python2.4/site-packages/OpenSSL/*.pyo
+/%{_libdir}/python2.4/site-packages/OpenSSL/*.pyo
 %defattr(-,root,root)
 %doc README doc/pyOpenSSL.ps 
 %ifarch i386
