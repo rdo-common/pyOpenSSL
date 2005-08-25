@@ -1,12 +1,12 @@
-%define __python /usr/bin/python2
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
 Version: 0.6
-Release: 1.p24.5
+Release: 1.p24.6
 Source0: http://pyopenssl.sf.net/%{name}-%{version}.tar.gz
 Patch0: pyOpenSSL-0.5.1-openssl097.patch
 Patch2: pyOpenSSL-elinks.patch
 Patch3: pyOpenSSL-nopdfout.patch
+Patch4: pyOpenSSL-threadsafe.patch
 License: LGPL
 Group: Development/Libraries
 BuildRoot: %{_tmppath}/%{name}-buildroot
@@ -28,9 +28,10 @@ High-level wrapper around a subset of the OpenSSL library, includes
 %patch0 -p1 -b .openssl097
 %patch2 -p1 -b .elinks
 %patch3 -p1 -b .nopdfout
+%patch4 -p1 -b .threadsafe
 
 %build
-%{__python} setup.py build
+python setup.py build
 make -C doc ps
 # ia64 does not have latex2html
 %ifarch i386
@@ -38,7 +39,7 @@ make -C doc text html
 %endif
 
 %install
-%{__python} setup.py install \
+python setup.py install \
 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
 sed -e 's|/[^/]*$||' INSTALLED_FILES | grep "site-packages/" | \
     sort | uniq | awk '{ print "%attr(755,root,root) %dir " $1}' > INSTALLED_DIRS
@@ -56,6 +57,9 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Wed Aug 24 2005 Jeremy Katz <katzj@redhat.com> - 0.6-1.p24.6
+- add dcbw's patch to fix some threading problems
+
 * Wed Aug 03 2005 Karsten Hopp <karsten@redhat.de> 0.6-1.p24.5
 - current rpm creates .pyo files, include them in filelist
 
@@ -138,7 +142,7 @@ rm -rf $RPM_BUILD_ROOT
 - Building 0.5.1rc1 with version number 0.5.0.91 (this should also fix the big
   error of pushing 0.5pre previously, since it breaks rpm's version comparison
   algorithm).
-- We use %{__python}. Too bad I can't pass --define's to distutils.
+- We use %%{__python}. Too bad I can't pass --define's to distutils.
 
 * Fri Aug 16 2002 Mihai Ibanescu <misa@redhat.com>
 - Building 0.5
