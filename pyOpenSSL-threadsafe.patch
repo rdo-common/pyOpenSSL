@@ -170,12 +170,14 @@
      MY_END_ALLOW_THREADS(self->tstate);
 --- pyOpenSSL-0.6/src/crypto/crypto.c.threadsafe	2004-08-09 10:56:05.000000000 -0400
 +++ pyOpenSSL-0.6/src/crypto/crypto.c	2005-07-12 22:29:32.000000000 -0400
-@@ -668,6 +668,72 @@
+@@ -668,6 +668,74 @@
      { NULL, NULL }
  };
  
 +
 +#ifdef WITH_THREAD
++
++#include <pthread.h>
 +
 +#define MUTEX_TYPE pthread_mutex_t
 +#define MUTEX_SETUP(x) pthread_mutex_init(&(x), NULL)
