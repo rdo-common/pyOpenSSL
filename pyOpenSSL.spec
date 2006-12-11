@@ -1,7 +1,9 @@
+%{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
+
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
 Version: 0.6
-Release: 1.p24.8
+Release: 1.p24.9
 Source0: http://pyopenssl.sf.net/%{name}-%{version}.tar.gz
 Patch0: pyOpenSSL-0.5.1-openssl097.patch
 Patch2: pyOpenSSL-elinks.patch
@@ -10,10 +12,9 @@ Patch4: pyOpenSSL-threadsafe.patch
 License: LGPL
 Group: Development/Libraries
 BuildRoot: %{_tmppath}/%{name}-buildroot
-Prefix: %{_prefix}
 Url: http://pyopenssl.sourceforge.net/
-Requires: python
-BuildRequires: elinks openssl-devel python-devel perl tetex-dvips tetex-latex
+BuildRequires: elinks openssl-devel python-devel
+BuildRequires: tetex-dvips tetex-latex latex2html
 
 %description
 High-level wrapper around a subset of the OpenSSL library, includes
@@ -29,29 +30,36 @@ High-level wrapper around a subset of the OpenSSL library, includes
 %patch2 -p1 -b .elinks
 %patch3 -p1 -b .nopdfout
 %patch4 -p1 -b .threadsafe
+# Fix permissions for debuginfo package
+%{__chmod} -x src/ssl/connection.c
 
 %build
-python setup.py build
-make -C doc ps
-make -C doc text html
+CFLAGS="%{optflags}" %{__python} setup.py build
+%{__make} -C doc ps
+%{__make} -C doc text html
 
 %install
-python setup.py install \
---root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
-sed -e 's|/[^/]*$||' INSTALLED_FILES | grep "site-packages/" | \
-    sort | uniq | awk '{ print "%attr(755,root,root) %dir " $1}' > INSTALLED_DIRS
-cat INSTALLED_FILES INSTALLED_DIRS > INSTALLED_OBJECTS
+%{__rm} -rf %{buildroot}
+%{__python} setup.py install -O1 --skip-build --root %{buildroot}
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+%{__rm} -rf %{buildroot}
 
-%files -f INSTALLED_OBJECTS
-%{_libdir}/python2.4/site-packages/OpenSSL/*.pyo
-%defattr(-,root,root)
+%files
+%defattr(-,root,root,-)
 %doc README doc/pyOpenSSL.ps 
 %doc doc/pyOpenSSL.txt doc/html
+%{python_sitearch}/OpenSSL/
 
 %changelog
+* Mon Dec 11 2006 Paul Howarth <paul@city-fan.org> - 0.6-1.p24.9
+- add missing buildreq latex2html, needed to build HTML docs
+- rewrite to be more in line with Fedora python spec template and use
+  %%{python_sitearch} rather than a script-generated %%files list
+- package is not relocatable - drop Prefix: tag
+- buildreq perl not necessary
+- fix permissions for files going into debuginfo package
+
 * Thu Dec  7 2006 Jeremy Katz <katzj@redhat.com> - 0.6-1.p24.8
 - rebuild for python 2.5
 
