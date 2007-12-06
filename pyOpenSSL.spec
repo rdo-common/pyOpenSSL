@@ -3,7 +3,7 @@
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
 Version: 0.6
-Release: 1.p24.9
+Release: 2.p24.9
 Source0: http://pyopenssl.sf.net/%{name}-%{version}.tar.gz
 Patch0: pyOpenSSL-0.5.1-openssl097.patch
 Patch2: pyOpenSSL-elinks.patch
@@ -52,6 +52,9 @@ CFLAGS="%{optflags}" %{__python} setup.py build
 %{python_sitearch}/OpenSSL/
 
 %changelog
+* Wed Dec  5 2007 Jeremy Katz <katzj@redhat.com> - 0.6-2.p24.9
+- rebuild for new openssl
+
 * Mon Dec 11 2006 Paul Howarth <paul@city-fan.org> - 0.6-1.p24.9
 - add missing buildreq latex2html, needed to build HTML docs
 - rewrite to be more in line with Fedora python spec template and use
