@@ -3,15 +3,15 @@
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
 Version: 0.6
-Release: 3.p24.9
+Release: 4%{?dist}
 Source0: http://pyopenssl.sf.net/%{name}-%{version}.tar.gz
 Patch0: pyOpenSSL-0.5.1-openssl097.patch
 Patch2: pyOpenSSL-elinks.patch
 Patch3: pyOpenSSL-nopdfout.patch
 Patch4: pyOpenSSL-threadsafe.patch
-License: LGPL
+License: LGPLv2+
 Group: Development/Libraries
-BuildRoot: %{_tmppath}/%{name}-buildroot
+BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 Url: http://pyopenssl.sourceforge.net/
 BuildRequires: elinks openssl-devel python-devel
 BuildRequires: tetex-dvips tetex-latex latex2html
@@ -50,8 +50,14 @@ CFLAGS="%{optflags}" %{__python} setup.py build
 %doc README doc/pyOpenSSL.ps 
 %doc doc/pyOpenSSL.txt doc/html
 %{python_sitearch}/OpenSSL/
+%{python_sitearch}/%{name}*.egg-info
 
 %changelog
+* Wed Mar 26 2008 Tom "spot" Callaway <tcallawa@redhat.com> - 0.6-4
+- fix horrific release tag
+- fix license tag
+- add egg-info
+
 * Tue Feb 19 2008 Fedora Release Engineering <rel-eng@fedoraproject.org> - 0.6-3.p24.9
 - Autorebuild for GCC 4.3
 
