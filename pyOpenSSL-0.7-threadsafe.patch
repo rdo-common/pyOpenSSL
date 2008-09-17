@@ -1,0 +1,135 @@
+--- pyOpenSSL-0.7/src/ssl/context.c	2008-03-21 22:34:42.000000000 +0000
++++ pyOpenSSL-0.7/src/ssl/context-new.c	2008-09-15 23:58:23.000000000 +0100
+@@ -64,39 +64,34 @@
+ static int
+ global_passphrase_callback(char *buf, int maxlen, int verify, void *arg)
+ {
+-    int len;
++    int len = 0;
+     char *str;
+     PyObject *argv, *ret = NULL;
+     ssl_ContextObj *ctx = (ssl_ContextObj *)arg;
+ 
++    if (!ctx->tstate)
++        fprintf (stderr, "ERROR: ctx->tstate == NULL!\n");
++    MY_END_ALLOW_THREADS(ctx->tstate);
++
+     /* The Python callback is called with a (maxlen,verify,userdata) tuple */
+     argv = Py_BuildValue("(iiO)", maxlen, verify, ctx->passphrase_userdata);
+-    if (ctx->tstate != NULL)
+-    {
+-        /* We need to get back our thread state before calling the callback */
+-        MY_END_ALLOW_THREADS(ctx->tstate);
+-        ret = PyEval_CallObject(ctx->passphrase_callback, argv);
+-        MY_BEGIN_ALLOW_THREADS(ctx->tstate);
+-    }
+-    else
+-    {
+-        ret = PyEval_CallObject(ctx->passphrase_callback, argv);
+-    }
++
++    ret = PyEval_CallObject(ctx->passphrase_callback, argv);
+     Py_DECREF(argv);
+ 
+     if (ret == NULL)
+-        return 0;
++        goto out;
+ 
+     if (!PyObject_IsTrue(ret))
+     {
+         Py_DECREF(ret);
+-	return 0;
++	goto out;
+     }
+ 
+     if (!PyString_Check(ret))
+     {
+         Py_DECREF(ret);
+-        return 0;
++        goto out;
+     }
+ 
+     len = PyString_Size(ret);
+@@ -107,6 +102,8 @@
+     strncpy(buf, str, len);
+     Py_XDECREF(ret);
+ 
++out:
++    MY_BEGIN_ALLOW_THREADS(ctx->tstate);
+     return len;
+ }
+ 
+@@ -126,7 +123,7 @@
+     SSL *ssl;
+     ssl_ConnectionObj *conn;
+     crypto_X509Obj *cert;
+-    int errnum, errdepth, c_ret, use_thread_state;
++    int errnum, errdepth, c_ret = 0, use_thread_state;
+         
+     // Get Connection object to check thread state
+     ssl = (SSL *)X509_STORE_CTX_get_app_data(x509_ctx);
+@@ -136,10 +133,15 @@
+     if (use_thread_state)
+         MY_END_ALLOW_THREADS(conn->tstate);
+     
+-    cert = crypto_X509_New(X509_STORE_CTX_get_current_cert(x509_ctx), 0);
+     errnum = X509_STORE_CTX_get_error(x509_ctx);
+     errdepth = X509_STORE_CTX_get_error_depth(x509_ctx);
+     
++    if (!conn->tstate)
++        fprintf (stderr, "ERROR: ctx->tstate == NULL!\n");
++    MY_END_ALLOW_THREADS(conn->tstate);
++
++    cert = crypto_X509_New(X509_STORE_CTX_get_current_cert(x509_ctx), 0);
++
+     argv = Py_BuildValue("(OOiii)", (PyObject *)conn, (PyObject *)cert,
+                                     errnum, errdepth, ok);
+     Py_DECREF(cert);
+@@ -173,28 +175,19 @@
+     ssl_ConnectionObj *conn = (ssl_ConnectionObj *)SSL_get_app_data(ssl);
+     PyObject *argv, *ret;
+ 
++    if (!conn->tstate)
++        fprintf (stderr, "ERROR: ctx->tstate == NULL!\n");
++    MY_END_ALLOW_THREADS(conn->tstate);
++
+     argv = Py_BuildValue("(Oii)", (PyObject *)conn, where, _ret);
+-    if (conn->tstate != NULL)
+-    {
+-        /* We need to get back our thread state before calling the callback */
+-        MY_END_ALLOW_THREADS(conn->tstate);
+-        ret = PyEval_CallObject(conn->context->info_callback, argv);
+-        if (ret == NULL)
+-            PyErr_Clear();
+-        else
+-            Py_DECREF(ret);
+-        MY_BEGIN_ALLOW_THREADS(conn->tstate);
+-    }
++    ret = PyEval_CallObject(conn->context->info_callback, argv);
++    if (ret == NULL)
++        PyErr_Clear();
+     else
+-    {
+-        ret = PyEval_CallObject(conn->context->info_callback, argv);
+-        if (ret == NULL)
+-            PyErr_Clear();
+-        else
+-            Py_DECREF(ret);
+-    }
++	Py_DECREF(ret);
+     Py_DECREF(argv);
+ 
++    MY_BEGIN_ALLOW_THREADS(conn->tstate);
+     return;
+ }
+ 
+@@ -447,6 +440,9 @@
+     if (!PyArg_ParseTuple(args, "s|i:use_privatekey_file", &keyfile, &filetype))
+         return NULL;
+ 
++    if (self->tstate)
++        fprintf (stderr, "ERROR: ctx->tstate != NULL!\n");
++
+     MY_BEGIN_ALLOW_THREADS(self->tstate);
+     ret = SSL_CTX_use_PrivateKey_file(self->ctx, keyfile, filetype);
+     MY_END_ALLOW_THREADS(self->tstate);

@@ -1,13 +1,12 @@
---- pyOpenSSL-0.5.1/setup.py.openssl097	2003-01-03 14:43:15.000000000 -0500
-+++ pyOpenSSL-0.5.1/setup.py	2003-01-03 14:43:08.000000000 -0500
-@@ -61,6 +61,10 @@
+--- pyOpenSSL-0.7/setup.py	2008-04-11 16:53:24.000000000 +0100
++++ pyOpenSSL-0.7/setup-new.py	2008-09-15 23:46:19.000000000 +0100
+@@ -64,6 +64,9 @@
  if sys.platform == 'darwin':
      IncludeDirs = ['/sw/include']
      LibraryDirs = ['/sw/lib']
-+# Doesn't make use of pkgconfig easily, so fudge it
 +elif os.name == 'posix':
 +    IncludeDirs = ['/usr/kerberos/include']
 +    LibraryDirs = ['/usr/kerberos/lib']
  
  def mkExtension(name):
-     import string
+     modname = 'OpenSSL.' + name
