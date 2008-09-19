@@ -3,13 +3,12 @@
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
 Version: 0.7
-Release: 1%{?dist}
+Release: 2%{?dist}
 Source0: http://pyopenssl.sf.net/%{name}-%{version}.tar.gz
 Patch0: pyOpenSSL-0.7-openssl.patch
 Patch2: pyOpenSSL-elinks.patch
 Patch3: pyOpenSSL-nopdfout.patch
 Patch4: pyOpenSSL-threadsafe.patch
-Patch5: pyOpenSSL-0.7-threadsafe.patch
 License: LGPLv2+
 Group: Development/Libraries
 BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
@@ -31,7 +30,6 @@ High-level wrapper around a subset of the OpenSSL library, includes
 %patch2 -p1 -b .elinks
 %patch3 -p1 -b .nopdfout
 %patch4 -p1 -b .threadsafe
-%patch5 -p1 -b .threadsafe
 # Fix permissions for debuginfo package
 %{__chmod} -x src/ssl/connection.c
 
@@ -55,6 +53,10 @@ CFLAGS="%{optflags}" %{__python} setup.py build
 %{python_sitearch}/%{name}*.egg-info
 
 %changelog
+* Fri Sep 19 2008 Dennis Gilmore <dennis@ausil.us> - 0.7-2
+- update threadsafe  patch 
+- bug#462807
+
 * Mon Sep 15 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 0.7-1
 - bump to new release
 - the inevitable patch fixes
