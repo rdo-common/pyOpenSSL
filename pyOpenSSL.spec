@@ -3,7 +3,7 @@
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
 Version: 0.7
-Release: 3%{?dist}
+Release: 4%{?dist}
 Source0: http://pyopenssl.sf.net/%{name}-%{version}.tar.gz
 Patch0: pyOpenSSL-0.7-openssl.patch
 Patch2: pyOpenSSL-elinks.patch
@@ -53,6 +53,9 @@ CFLAGS="%{optflags}" %{__python} setup.py build
 %{python_sitearch}/%{name}*.egg-info
 
 %changelog
+* Thu Jan 15 2009 Dennis Gilmore <dennis@ausil.us> - 0.7-4
+- rebuild against now openssl
+
 * Sat Nov 29 2008 Ignacio Vazquez-Abrams <ivazqueznet+rpm@gmail.com> - 0.7-3
 - Rebuild for Python 2.6
 
