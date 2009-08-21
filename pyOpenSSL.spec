@@ -3,7 +3,7 @@
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
 Version: 0.7
-Release: 6%{?dist}
+Release: 7%{?dist}
 Source0: http://pyopenssl.sf.net/%{name}-%{version}.tar.gz
 Patch0: pyOpenSSL-0.7-openssl.patch
 Patch2: pyOpenSSL-elinks.patch
@@ -53,6 +53,9 @@ CFLAGS="%{optflags}" %{__python} setup.py build
 %{python_sitearch}/%{name}*.egg-info
 
 %changelog
+* Fri Aug 21 2009 Tomas Mraz <tmraz@redhat.com> - 0.7-7
+- rebuilt with new openssl
+
 * Sun Jul 26 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.7-6
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
 
