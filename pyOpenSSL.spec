@@ -2,13 +2,14 @@
 
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
-Version: 0.7
-Release: 7%{?dist}
+Version: 0.9
+Release: 1%{?dist}
 Source0: http://pyopenssl.sf.net/%{name}-%{version}.tar.gz
 Patch0: pyOpenSSL-0.7-openssl.patch
 Patch2: pyOpenSSL-elinks.patch
 Patch3: pyOpenSSL-nopdfout.patch
-Patch4: pyOpenSSL-threadsafe.patch
+# Hopefully the following patch is unnecessary now
+#Patch4: pyOpenSSL-threadsafe.patch
 License: LGPLv2+
 Group: Development/Libraries
 BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
@@ -26,10 +27,9 @@ High-level wrapper around a subset of the OpenSSL library, includes
 
 %prep
 %setup -q
-%patch0 -p1 -b .openssl097
+%patch0 -p1 -b .posixIncludes
 %patch2 -p1 -b .elinks
 %patch3 -p1 -b .nopdfout
-%patch4 -p1 -b .threadsafe
 # Fix permissions for debuginfo package
 %{__chmod} -x src/ssl/connection.c
 
@@ -37,6 +37,7 @@ High-level wrapper around a subset of the OpenSSL library, includes
 CFLAGS="%{optflags}" %{__python} setup.py build
 %{__make} -C doc ps
 %{__make} -C doc text html
+find doc/ -name pyOpenSSL.\*
 
 %install
 %{__rm} -rf %{buildroot}
@@ -47,12 +48,15 @@ CFLAGS="%{optflags}" %{__python} setup.py build
 
 %files
 %defattr(-,root,root,-)
-%doc README doc/pyOpenSSL.ps 
-%doc doc/pyOpenSSL.txt doc/html
+%doc README doc/pyOpenSSL.* doc/html
 %{python_sitearch}/OpenSSL/
 %{python_sitearch}/%{name}*.egg-info
 
 %changelog
+* Tue Sep 29 2009 Matěj Cepl <mcepl@redhat.com> - 0.9-1
+- New upstream release
+- Fix BuildRequires to make Postscript documentation buildable
+
 * Fri Aug 21 2009 Tomas Mraz <tmraz@redhat.com> - 0.7-7
 - rebuilt with new openssl
 
