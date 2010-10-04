@@ -1,50 +1,48 @@
-%{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
-
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
-Version: 0.9
-Release: 2%{?dist}
-Source0: http://pyopenssl.sf.net/%{name}-%{version}.tar.gz
-Patch0: pyOpenSSL-0.7-openssl.patch
+Version: 0.10
+Release: 1%{?dist}
+Source0: http://pypi.python.org/packages/source/p/pyOpenSSL/%{name}-%{version}.tar.gz
+
+# Fedora specific patches
+
 Patch2: pyOpenSSL-elinks.patch
 Patch3: pyOpenSSL-nopdfout.patch
-# Hopefully the following patch is unnecessary now
-#Patch4: pyOpenSSL-threadsafe.patch
 License: LGPLv2+
 Group: Development/Libraries
-BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 Url: http://pyopenssl.sourceforge.net/
 BuildRequires: elinks openssl-devel python-devel
 BuildRequires: tetex-dvips tetex-latex latex2html
 
+# we don't want to provide private python extension libs
+%{?filter_setup:
+%filter_provides_in %{python_sitearch}/.*\.so$ 
+%filter_setup
+}
+
 %description
-High-level wrapper around a subset of the OpenSSL library, includes
+High-level wrapper around a subset of the OpenSSL library, includes among others
  * SSL.Connection objects, wrapping the methods of Python's portable
    sockets
  * Callbacks written in Python
  * Extensive error-handling mechanism, mirroring OpenSSL's error codes
-...  and much more ;)
 
 %prep
 %setup -q
-%patch0 -p1 -b .posixIncludes
 %patch2 -p1 -b .elinks
 %patch3 -p1 -b .nopdfout
 # Fix permissions for debuginfo package
 %{__chmod} -x src/ssl/connection.c
 
 %build
-CFLAGS="%{optflags}" %{__python} setup.py build
+CFLAGS="%{optflags} -fno-strict-aliasing" %{__python} setup.py build
 %{__make} -C doc ps
 %{__make} -C doc text html
 find doc/ -name pyOpenSSL.\*
 
 %install
-%{__rm} -rf %{buildroot}
 %{__python} setup.py install -O1 --skip-build --root %{buildroot}
 
-%clean
-%{__rm} -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
@@ -53,6 +51,10 @@ find doc/ -name pyOpenSSL.\*
 %{python_sitearch}/%{name}*.egg-info
 
 %changelog
+* Mon Oct  4 2010 Tomas Mraz <tmraz@redhat.com> - 0.10-1
+- Merge-review cleanup by Parag Nemade (#226335)
+- New upstream release
+
 * Wed Jul 21 2010 David Malcolm <dmalcolm@redhat.com> - 0.9-2
 - Rebuilt for https://fedoraproject.org/wiki/Features/Python_2.7/MassRebuild
 
