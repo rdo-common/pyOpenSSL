@@ -1,13 +1,15 @@
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
 Version: 0.10
-Release: 1%{?dist}
+Release: 2%{?dist}
 Source0: http://pypi.python.org/packages/source/p/pyOpenSSL/%{name}-%{version}.tar.gz
 
 # Fedora specific patches
 
 Patch2: pyOpenSSL-elinks.patch
 Patch3: pyOpenSSL-nopdfout.patch
+# Submitted upstream: https://bugs.launchpad.net/pyopenssl/+bug/686804
+Patch4: pyOpenSSL-py2.7-memoryview.patch
 License: LGPLv2+
 Group: Development/Libraries
 Url: http://pyopenssl.sourceforge.net/
@@ -31,6 +33,10 @@ High-level wrapper around a subset of the OpenSSL library, includes among others
 %setup -q
 %patch2 -p1 -b .elinks
 %patch3 -p1 -b .nopdfout
+# This is necessary on python-2.7+ but works on python-2.6+
+%if 0%{?fedora} >= 13 || 0%{?rhel} >= 5
+%patch4 -p1 -b .py2.7
+%endif
 # Fix permissions for debuginfo package
 %{__chmod} -x src/ssl/connection.c
 
@@ -41,7 +47,7 @@ CFLAGS="%{optflags} -fno-strict-aliasing" %{__python} setup.py build
 find doc/ -name pyOpenSSL.\*
 
 %install
-%{__python} setup.py install -O1 --skip-build --root %{buildroot}
+%{__python} setup.py install --skip-build --root %{buildroot}
 
 
 %files
@@ -51,6 +57,9 @@ find doc/ -name pyOpenSSL.\*
 %{python_sitearch}/%{name}*.egg-info
 
 %changelog
+* Tue Dec 7 2010 Toshio Kuratomi <toshio@fedoraproject.org> - 0.10-2
+- Fix incompatibility with python-2.7's socket module.
+
 * Mon Oct  4 2010 Tomas Mraz <tmraz@redhat.com> - 0.10-1
 - Merge-review cleanup by Parag Nemade (#226335)
 - New upstream release
