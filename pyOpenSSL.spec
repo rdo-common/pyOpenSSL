@@ -1,7 +1,7 @@
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
 Version: 0.10
-Release: 2%{?dist}
+Release: 3%{?dist}
 Source0: http://pypi.python.org/packages/source/p/pyOpenSSL/%{name}-%{version}.tar.gz
 
 # Fedora specific patches
@@ -57,6 +57,9 @@ find doc/ -name pyOpenSSL.\*
 %{python_sitearch}/%{name}*.egg-info
 
 %changelog
+* Tue Feb 08 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.10-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
+
 * Tue Dec 7 2010 Toshio Kuratomi <toshio@fedoraproject.org> - 0.10-2
 - Fix incompatibility with python-2.7's socket module.
 
