@@ -1,15 +1,13 @@
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
-Version: 0.10
-Release: 3%{?dist}
+Version: 0.12
+Release: 1%{?dist}
 Source0: http://pypi.python.org/packages/source/p/pyOpenSSL/%{name}-%{version}.tar.gz
 
 # Fedora specific patches
 
 Patch2: pyOpenSSL-elinks.patch
 Patch3: pyOpenSSL-nopdfout.patch
-# Submitted upstream: https://bugs.launchpad.net/pyopenssl/+bug/686804
-Patch4: pyOpenSSL-py2.7-memoryview.patch
 License: LGPLv2+
 Group: Development/Libraries
 Url: http://pyopenssl.sourceforge.net/
@@ -33,12 +31,9 @@ High-level wrapper around a subset of the OpenSSL library, includes among others
 %setup -q
 %patch2 -p1 -b .elinks
 %patch3 -p1 -b .nopdfout
-# This is necessary on python-2.7+ but works on python-2.6+
-%if 0%{?fedora} >= 13 || 0%{?rhel} >= 5
-%patch4 -p1 -b .py2.7
-%endif
+
 # Fix permissions for debuginfo package
-%{__chmod} -x src/ssl/connection.c
+%{__chmod} -x OpenSSL/ssl/connection.c
 
 %build
 CFLAGS="%{optflags} -fno-strict-aliasing" %{__python} setup.py build
@@ -57,6 +52,9 @@ find doc/ -name pyOpenSSL.\*
 %{python_sitearch}/%{name}*.egg-info
 
 %changelog
+* Tue Jun 28 2011 Tomas Mraz <tmraz@redhat.com> - 0.12-1
+- New upstream release
+
 * Tue Feb 08 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.10-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
 
