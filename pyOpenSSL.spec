@@ -1,14 +1,14 @@
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
-Version: 0.12
-Release: 2%{?dist}
+Version: 0.13
+Release: 1%{?dist}
 Source0: http://pypi.python.org/packages/source/p/pyOpenSSL/%{name}-%{version}.tar.gz
 
 # Fedora specific patches
 
 Patch2: pyOpenSSL-elinks.patch
 Patch3: pyOpenSSL-nopdfout.patch
-License: LGPLv2+
+License: ASL 2.0
 Group: Development/Libraries
 Url: http://pyopenssl.sourceforge.net/
 BuildRequires: elinks openssl-devel python-devel
@@ -52,6 +52,9 @@ find doc/ -name pyOpenSSL.\*
 %{python_sitearch}/%{name}*.egg-info
 
 %changelog
+* Wed Jun 20 2012 Tomas Mraz <tmraz@redhat.com> - 0.13-1
+- New upstream release
+
 * Sat Jan 14 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.12-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
 
