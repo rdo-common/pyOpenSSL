@@ -1,7 +1,7 @@
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
 Version: 0.13
-Release: 3%{?dist}
+Release: 4%{?dist}
 Source0: http://pypi.python.org/packages/source/p/pyOpenSSL/%{name}-%{version}.tar.gz
 
 # Fedora specific patches
@@ -17,6 +17,7 @@ BuildRequires: tetex-dvips tetex-latex latex2html
 # we don't want to provide private python extension libs
 %{?filter_setup:
 %filter_provides_in %{python_sitearch}/.*\.so$ 
+%filter_requires_in %{_datadir}/doc/ 
 %filter_setup
 }
 
@@ -52,6 +53,9 @@ find doc/ -name pyOpenSSL.\*
 %{python_sitearch}/%{name}*.egg-info
 
 %changelog
+* Fri Oct 12 2012 Petr Pisar <ppisar@redhat.com> - 0.13-4
+- Do not scan documentation for dependencies (bug #865806)
+
 * Mon Oct 08 2012 Dan Horák <dan[at]danny.cz> - 0.13-3
 - rebuilt because ARM packages had wrong Requires autodetected
 
