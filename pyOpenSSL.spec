@@ -1,13 +1,16 @@
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
 Version: 0.13
-Release: 5%{?dist}
+Release: 6%{?dist}
 Source0: http://pypi.python.org/packages/source/p/pyOpenSSL/%{name}-%{version}.tar.gz
 
 # Fedora specific patches
 
 Patch2: pyOpenSSL-elinks.patch
 Patch3: pyOpenSSL-nopdfout.patch
+
+Patch10: pyOpenSSL-0.13-check-error.patch
+
 License: ASL 2.0
 Group: Development/Libraries
 Url: http://pyopenssl.sourceforge.net/
@@ -32,6 +35,7 @@ High-level wrapper around a subset of the OpenSSL library, includes among others
 %setup -q
 %patch2 -p1 -b .elinks
 %patch3 -p1 -b .nopdfout
+%patch10 -p1 -b .error
 
 # Fix permissions for debuginfo package
 %{__chmod} -x OpenSSL/ssl/connection.c
@@ -53,6 +57,10 @@ find doc/ -name pyOpenSSL.\*
 %{python_sitearch}/%{name}*.egg-info
 
 %changelog
+* Thu Apr  4 2013 Tomáš Mráz <tmraz@redhat.com> - 0.13-6
+- Check for error returns which cause segfaults in FIPS mode
+- Fix missing error check and leak found by gcc-with-cpychecker (#800086)
+
 * Thu Feb 14 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.13-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
 
