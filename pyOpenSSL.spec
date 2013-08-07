@@ -1,8 +1,12 @@
+%if 0%{?fedora} > 12
+%global with_python3 1
+%endif
+
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
 Version: 0.13
-Release: 7%{?dist}
-Source0: http://pypi.python.org/packages/source/p/pyOpenSSL/%{name}-%{version}.tar.gz
+Release: 8%{?dist}
+Source0: http://pypi.python.org/packages/source/p/pyOpenSSL/pyOpenSSL-%{version}.tar.gz
 
 # Fedora specific patches
 
@@ -14,15 +18,17 @@ Patch10: pyOpenSSL-0.13-check-error.patch
 License: ASL 2.0
 Group: Development/Libraries
 Url: http://pyopenssl.sourceforge.net/
-BuildRequires: elinks openssl-devel python-devel
-BuildRequires: tetex-dvips tetex-latex latex2html
 
-# we don't want to provide private python extension libs
-%{?filter_setup:
-%filter_provides_in %{python_sitearch}/.*\.so$ 
-%filter_requires_in %{_datadir}/doc/ 
-%filter_setup
-}
+BuildRequires: elinks
+BuildRequires: openssl-devel
+BuildRequires: tetex-dvips
+BuildRequires: tetex-latex
+BuildRequires: latex2html
+
+BuildRequires: python2-devel
+%if 0%{?with_python3}
+BuildRequires: python3-devel
+%endif
 
 %description
 High-level wrapper around a subset of the OpenSSL library, includes among others
@@ -31,8 +37,37 @@ High-level wrapper around a subset of the OpenSSL library, includes among others
  * Callbacks written in Python
  * Extensive error-handling mechanism, mirroring OpenSSL's error codes
 
+%if 0%{?with_python3}
+%package -n python3-pyOpenSSL
+Summary: Python wrapper module around the OpenSSL library
+
+%description -n python3-pyOpenSSL
+High-level wrapper around a subset of the OpenSSL library, includes among others
+ * SSL.Connection objects, wrapping the methods of Python's portable
+   sockets
+ * Callbacks written in Python
+ * Extensive error-handling mechanism, mirroring OpenSSL's error codes
+%endif
+
+%package doc
+Summary: Documentation for pyOpenSSL
+BuildArch: noarch
+
+%description doc
+Documentation for pyOpenSSL
+
+# we don't want to provide private python extension libs
+%{?filter_setup:
+%filter_provides_in %{python_sitearch}/.*\.so$ 
+%if 0%{?with_python3}
+%filter_provides_in %{python3_sitearch}/.*\.so$ 
+%endif
+%filter_requires_in %{_datadir}/doc/ 
+%filter_setup
+}
+
 %prep
-%setup -q
+%setup -q -n pyOpenSSL-%{version}
 %patch2 -p1 -b .elinks
 %patch3 -p1 -b .nopdfout
 %patch10 -p1 -b .error
@@ -40,23 +75,53 @@ High-level wrapper around a subset of the OpenSSL library, includes among others
 # Fix permissions for debuginfo package
 %{__chmod} -x OpenSSL/ssl/connection.c
 
+%if 0%{?with_python3}
+rm -rf %{py3dir}
+cp -a . %{py3dir}
+find %{py3dir} -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python3}|'
+%endif
+
+find -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python}|'
+
 %build
 CFLAGS="%{optflags} -fno-strict-aliasing" %{__python} setup.py build
+
+%if 0%{?with_python3}
+pushd %{py3dir}
+CFLAGS="%{optflags} -fno-strict-aliasing" %{__python3} setup.py build
+popd
+%endif
+
 %{__make} -C doc ps
 %{__make} -C doc text html
-find doc/ -name pyOpenSSL.\*
 
 %install
 %{__python} setup.py install --skip-build --root %{buildroot}
 
+%if 0%{?with_python3}
+pushd %{py3dir}
+%{__python3} setup.py install --skip-build --root %{buildroot}
+popd
+%endif
 
 %files
-%defattr(-,root,root,-)
-%doc README doc/pyOpenSSL.* doc/html
 %{python_sitearch}/OpenSSL/
-%{python_sitearch}/%{name}*.egg-info
+%{python_sitearch}/pyOpenSSL-*.egg-info
+
+%if 0%{?with_python3}
+%files -n python3-pyOpenSSL
+%{python3_sitearch}/OpenSSL/
+%{python3_sitearch}/pyOpenSSL-*.egg-info
+%endif
+
+%files doc
+%doc README doc/pyOpenSSL.* doc/html
 
 %changelog
+* Tue Aug 06 2013 Jeffrey C. Ollie <jeff@ocjtech.us> - 0.13-8
+- Python 3 subpackage
+- Split documentation off into noarch subpackage
+
 * Sun Aug 04 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.13-7
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
 
