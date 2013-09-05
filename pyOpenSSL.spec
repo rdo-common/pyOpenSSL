@@ -4,8 +4,8 @@
 
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
-Version: 0.13
-Release: 8%{?dist}
+Version: 0.13.1
+Release: 1%{?dist}
 Source0: http://pypi.python.org/packages/source/p/pyOpenSSL/pyOpenSSL-%{version}.tar.gz
 
 # Fedora specific patches
@@ -75,6 +75,7 @@ Documentation for pyOpenSSL
 # Fix permissions for debuginfo package
 %{__chmod} -x OpenSSL/ssl/connection.c
 
+%build
 %if 0%{?with_python3}
 rm -rf %{py3dir}
 cp -a . %{py3dir}
@@ -83,7 +84,6 @@ find %{py3dir} -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python3}|'
 
 find -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python}|'
 
-%build
 CFLAGS="%{optflags} -fno-strict-aliasing" %{__python} setup.py build
 
 %if 0%{?with_python3}
@@ -118,6 +118,10 @@ popd
 %doc README doc/pyOpenSSL.* doc/html
 
 %changelog
+* Thu Sep  5 2013 Tomáš Mráz <tmraz@redhat.com> - 0.13.1-1
+- new upstream release fixing a security issue with string
+  formatting subjectAltName of a certificate
+
 * Tue Aug 06 2013 Jeffrey C. Ollie <jeff@ocjtech.us> - 0.13-8
 - Python 3 subpackage
 - Split documentation off into noarch subpackage
