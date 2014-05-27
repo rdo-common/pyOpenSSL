@@ -5,7 +5,7 @@
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
 Version: 0.13.1
-Release: 1%{?dist}
+Release: 2%{?dist}
 Source0: http://pypi.python.org/packages/source/p/pyOpenSSL/pyOpenSSL-%{version}.tar.gz
 
 # Fedora specific patches
@@ -118,6 +118,9 @@ popd
 %doc README doc/pyOpenSSL.* doc/html
 
 %changelog
+* Tue May 27 2014 Kalev Lember <kalevlember@gmail.com> - 0.13.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Changes/Python_3.4
+
 * Thu Sep  5 2013 Tomáš Mráz <tmraz@redhat.com> - 0.13.1-1
 - new upstream release fixing a security issue with string
   formatting subjectAltName of a certificate
