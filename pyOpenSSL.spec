@@ -4,8 +4,8 @@
 
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
-Version: 0.13.1
-Release: 4%{?dist}
+Version: 0.14
+Release: 1%{?dist}
 Source0: http://pypi.python.org/packages/source/p/pyOpenSSL/pyOpenSSL-%{version}.tar.gz
 
 # Fedora specific patches
@@ -58,11 +58,11 @@ Documentation for pyOpenSSL
 
 # we don't want to provide private python extension libs
 %{?filter_setup:
-%filter_provides_in %{python_sitearch}/.*\.so$ 
+%filter_provides_in %{python_sitearch}/.*\.so$
 %if 0%{?with_python3}
-%filter_provides_in %{python3_sitearch}/.*\.so$ 
+%filter_provides_in %{python3_sitearch}/.*\.so$
 %endif
-%filter_requires_in %{_datadir}/doc/ 
+%filter_requires_in %{_datadir}/doc/
 %filter_setup
 }
 
@@ -118,6 +118,9 @@ popd
 %doc README doc/pyOpenSSL.* doc/html
 
 %changelog
+* Thu Sep 25 2014 Matej Cepl <mcepl@redhat.com> - 0.14-1
+- Upgrade to 0.14.0
+
 * Sun Aug 17 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.13.1-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
 
@@ -196,7 +199,7 @@ popd
 - Rebuild for Python 2.6
 
 * Fri Sep 19 2008 Dennis Gilmore <dennis@ausil.us> - 0.7-2
-- update threadsafe  patch 
+- update threadsafe  patch
 - bug#462807
 
 * Mon Sep 15 2008 Paul F. Johnson <paul@all-the-johnsons.co.uk> 0.7-1
@@ -294,7 +297,7 @@ popd
 - Built on 7.x
 
 * Mon Mar  3 2003 Mihai Ibanescu <misa@redhat.com> 0.5.1-9
-- bug #73967: Added Requires: python 
+- bug #73967: Added Requires: python
 
 * Mon Feb 24 2003 Elliot Lee <sopwith@redhat.com>
 - rebuilt
