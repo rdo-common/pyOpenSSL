@@ -8,26 +8,19 @@ Version: 0.14
 Release: 1%{?dist}
 Source0: http://pypi.python.org/packages/source/p/pyOpenSSL/pyOpenSSL-%{version}.tar.gz
 
-# Fedora specific patches
-
-Patch2: pyOpenSSL-elinks.patch
-Patch3: pyOpenSSL-nopdfout.patch
-
-Patch10: pyOpenSSL-0.13-check-error.patch
-
+BuildArch: noarch
 License: ASL 2.0
 Group: Development/Libraries
 Url: http://pyopenssl.sourceforge.net/
 
-BuildRequires: elinks
-BuildRequires: openssl-devel
-BuildRequires: tetex-dvips
-BuildRequires: tetex-latex
-BuildRequires: latex2html
+BuildRequires: python-setuptools
+BuildRequires: python-sphinx
 
 BuildRequires: python2-devel
+BuildRequires: python-cryptography
 %if 0%{?with_python3}
 BuildRequires: python3-devel
+BuildRequires: python3-cryptography
 %endif
 
 %description
@@ -56,24 +49,8 @@ BuildArch: noarch
 %description doc
 Documentation for pyOpenSSL
 
-# we don't want to provide private python extension libs
-%{?filter_setup:
-%filter_provides_in %{python_sitearch}/.*\.so$
-%if 0%{?with_python3}
-%filter_provides_in %{python3_sitearch}/.*\.so$
-%endif
-%filter_requires_in %{_datadir}/doc/
-%filter_setup
-}
-
 %prep
 %setup -q -n pyOpenSSL-%{version}
-%patch2 -p1 -b .elinks
-%patch3 -p1 -b .nopdfout
-%patch10 -p1 -b .error
-
-# Fix permissions for debuginfo package
-%{__chmod} -x OpenSSL/ssl/connection.c
 
 %build
 %if 0%{?with_python3}
@@ -92,8 +69,7 @@ CFLAGS="%{optflags} -fno-strict-aliasing" %{__python3} setup.py build
 popd
 %endif
 
-%{__make} -C doc ps
-%{__make} -C doc text html
+%{__make} -C doc html
 
 %install
 %{__python} setup.py install --skip-build --root %{buildroot}
@@ -105,21 +81,21 @@ popd
 %endif
 
 %files
-%{python_sitearch}/OpenSSL/
-%{python_sitearch}/pyOpenSSL-*.egg-info
+%{python_sitelib}/OpenSSL/
+%{python_sitelib}/pyOpenSSL-*.egg-info
 
 %if 0%{?with_python3}
 %files -n python3-pyOpenSSL
-%{python3_sitearch}/OpenSSL/
-%{python3_sitearch}/pyOpenSSL-*.egg-info
+%{python3_sitelib}/OpenSSL/
+%{python3_sitelib}/pyOpenSSL-*.egg-info
 %endif
 
 %files doc
-%doc README doc/pyOpenSSL.* doc/html
+%doc examples doc/_build/html
 
 %changelog
-* Thu Sep 25 2014 Matej Cepl <mcepl@redhat.com> - 0.14-1
-- Upgrade to 0.14.0
+* Wed Jan  7 2015 Tomáš Mráz <tmraz@redhat.com> - 0.14-1
+- Upgrade to 0.14 with help of Matěj Cepl and Kevin Fenzi
 
 * Sun Aug 17 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.13.1-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
