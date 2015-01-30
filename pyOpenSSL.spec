@@ -5,7 +5,7 @@
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
 Version: 0.14
-Release: 2%{?dist}
+Release: 3%{?dist}
 Source0: http://pypi.python.org/packages/source/p/pyOpenSSL/pyOpenSSL-%{version}.tar.gz
 
 BuildArch: noarch
@@ -22,7 +22,6 @@ Requires: python-cryptography
 %if 0%{?with_python3}
 BuildRequires: python3-devel
 BuildRequires: python3-cryptography
-Requires: python3-cryptography
 %endif
 
 %description
@@ -35,6 +34,7 @@ High-level wrapper around a subset of the OpenSSL library, includes among others
 %if 0%{?with_python3}
 %package -n python3-pyOpenSSL
 Summary: Python wrapper module around the OpenSSL library
+Requires: python3-cryptography
 
 %description -n python3-pyOpenSSL
 High-level wrapper around a subset of the OpenSSL library, includes among others
@@ -96,6 +96,9 @@ popd
 %doc examples doc/_build/html
 
 %changelog
+* Fri Jan 30 2015 Miro Hrončok <mhroncok@redhat.com> - 0.14-3
+- Fix bogus requires (python3-cryptography should belong to python3-pyOpenSSL)
+
 * Wed Jan  7 2015 Tomáš Mráz <tmraz@redhat.com> - 0.14-2
 - Add missing python-cryptography requires
 
