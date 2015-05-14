@@ -5,8 +5,10 @@
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
 Version: 0.14
-Release: 3%{?dist}
+Release: 4%{?dist}
 Source0: http://pypi.python.org/packages/source/p/pyOpenSSL/pyOpenSSL-%{version}.tar.gz
+# The patch is included upstream except we use sha1 by default instead of md5
+Patch1: pyOpenSSL-0.14-crl-digest.patch
 
 BuildArch: noarch
 License: ASL 2.0
@@ -54,6 +56,8 @@ Documentation for pyOpenSSL
 %prep
 %setup -q -n pyOpenSSL-%{version}
 
+%patch1 -p1 -b .digest
+
 %build
 %if 0%{?with_python3}
 rm -rf %{py3dir}
@@ -96,6 +100,9 @@ popd
 %doc examples doc/_build/html
 
 %changelog
+* Thu May 14 2015 Tomáš Mráz <tmraz@redhat.com> - 0.14-4
+- allow changing the digest used when exporting CRL and use SHA1 by default
+
 * Fri Jan 30 2015 Miro Hrončok <mhroncok@redhat.com> - 0.14-3
 - Fix bogus requires (python3-cryptography should belong to python3-pyOpenSSL)
 
