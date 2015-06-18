@@ -5,7 +5,7 @@
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
 Version: 0.14
-Release: 4%{?dist}
+Release: 5%{?dist}
 Source0: http://pypi.python.org/packages/source/p/pyOpenSSL/pyOpenSSL-%{version}.tar.gz
 # The patch is included upstream except we use sha1 by default instead of md5
 Patch1: pyOpenSSL-0.14-crl-digest.patch
@@ -100,6 +100,9 @@ popd
 %doc examples doc/_build/html
 
 %changelog
+* Thu Jun 18 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.14-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
+
 * Thu May 14 2015 Tomáš Mráz <tmraz@redhat.com> - 0.14-4
 - allow changing the digest used when exporting CRL and use SHA1 by default
 
