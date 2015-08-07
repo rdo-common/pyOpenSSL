@@ -4,11 +4,9 @@
 
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
-Version: 0.14
-Release: 5%{?dist}
+Version: 0.15.1
+Release: 1%{?dist}
 Source0: http://pypi.python.org/packages/source/p/pyOpenSSL/pyOpenSSL-%{version}.tar.gz
-# The patch is included upstream except we use sha1 by default instead of md5
-Patch1: pyOpenSSL-0.14-crl-digest.patch
 
 BuildArch: noarch
 License: ASL 2.0
@@ -56,8 +54,6 @@ Documentation for pyOpenSSL
 %prep
 %setup -q -n pyOpenSSL-%{version}
 
-%patch1 -p1 -b .digest
-
 %build
 %if 0%{?with_python3}
 rm -rf %{py3dir}
@@ -100,6 +96,9 @@ popd
 %doc examples doc/_build/html
 
 %changelog
+* Fri Aug  7 2015 Tomáš Mráz <tmraz@redhat.com> - 0.15.1-1
+- Upgrade to 0.15.1
+
 * Thu Jun 18 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.14-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
 
