@@ -1,11 +1,11 @@
-%if 0%{?fedora} > 12
+%if 0%{?fedora}
 %global with_python3 1
 %endif
 
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
 Version: 16.0.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 Source0: https://pypi.python.org/packages/source/p/pyOpenSSL/pyOpenSSL-%{version}.tar.gz
 Source1: https://pypi.python.org/packages/source/p/pyOpenSSL/pyOpenSSL-%{version}.tar.gz.asc
 
@@ -20,7 +20,6 @@ BuildRequires: python-sphinx_rtd_theme
 
 BuildRequires: python2-devel
 BuildRequires: python-cryptography >= 1.3.0
-Requires: python-cryptography >= 1.3.0
 %if 0%{?with_python3}
 BuildRequires: python3-devel
 BuildRequires: python3-cryptography >= 1.3.0
@@ -33,10 +32,25 @@ High-level wrapper around a subset of the OpenSSL library, includes among others
  * Callbacks written in Python
  * Extensive error-handling mechanism, mirroring OpenSSL's error codes
 
+%package -n python2-pyOpenSSL
+Summary: Python 2 wrapper module around the OpenSSL library
+Requires: python-cryptography >= 1.3.0
+Obsoletes: pyOpenSSL < 16.0.0-3
+Provides: pyOpenSSL = %{version}-%{release}
+%{?python_provide:%python_provide python2-pyOpenSSL}
+
+%description -n python2-pyOpenSSL
+High-level wrapper around a subset of the OpenSSL library, includes among others
+ * SSL.Connection objects, wrapping the methods of Python's portable
+   sockets
+ * Callbacks written in Python
+ * Extensive error-handling mechanism, mirroring OpenSSL's error codes
+
 %if 0%{?with_python3}
 %package -n python3-pyOpenSSL
-Summary: Python wrapper module around the OpenSSL library
+Summary: Python 3 wrapper module around the OpenSSL library
 Requires: python3-cryptography
+%{?python_provide:%python_provide python3-pyOpenSSL}
 
 %description -n python3-pyOpenSSL
 High-level wrapper around a subset of the OpenSSL library, includes among others
@@ -57,47 +71,46 @@ Documentation for pyOpenSSL
 %setup -q -n pyOpenSSL-%{version}
 
 %build
-%if 0%{?with_python3}
-rm -rf %{py3dir}
-cp -a . %{py3dir}
-find %{py3dir} -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python3}|'
-%endif
-
-find -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python}|'
-
-CFLAGS="%{optflags} -fno-strict-aliasing" %{__python} setup.py build
+%py2_build
 
 %if 0%{?with_python3}
-pushd %{py3dir}
-CFLAGS="%{optflags} -fno-strict-aliasing" %{__python3} setup.py build
-popd
+%py3_build
 %endif
 
 %{__make} -C doc html
 
 %install
-%{__python} setup.py install --skip-build --root %{buildroot}
+%py2_install
 
 %if 0%{?with_python3}
-pushd %{py3dir}
-%{__python3} setup.py install --skip-build --root %{buildroot}
-popd
+%py3_install
 %endif
 
-%files
+# Cleanup sphinx .buildinfo file before packaging
+rm doc/_build/html/.buildinfo
+
+%files -n python2-pyOpenSSL
+%license LICENSE
 %{python_sitelib}/OpenSSL/
 %{python_sitelib}/pyOpenSSL-*.egg-info
 
 %if 0%{?with_python3}
 %files -n python3-pyOpenSSL
+%license LICENSE
 %{python3_sitelib}/OpenSSL/
 %{python3_sitelib}/pyOpenSSL-*.egg-info
 %endif
 
 %files doc
-%doc examples doc/_build/html
+%license LICENSE
+%doc CHANGELOG.rst examples doc/_build/html
 
 %changelog
+* Fri Sep  9 2016 Orion Poplawski <orion@cora.nwra.com> - 16.0.0-3
+- Modernize spec
+- Ship python2-pyOpenSSL
+- Package LICENSE
+
 * Tue Jul 19 2016 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 16.0.0-2
 - https://fedoraproject.org/wiki/Changes/Automatic_Provides_for_Python_RPM_Packages
 
