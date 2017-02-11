@@ -5,7 +5,7 @@
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
 Version: 16.2.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 Source0: https://pypi.python.org/packages/source/p/pyOpenSSL/pyOpenSSL-%{version}.tar.gz
 #Source1: https://pypi.python.org/packages/source/p/pyOpenSSL/pyOpenSSL-%{version}.tar.gz.asc
 
@@ -106,6 +106,9 @@ rm doc/_build/html/.buildinfo
 %doc CHANGELOG.rst examples doc/_build/html
 
 %changelog
+* Sat Feb 11 2017 Fedora Release Engineering <releng@fedoraproject.org> - 16.2.0-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
+
 * Mon Dec 12 2016 Stratakis Charalampos <cstratak@redhat.com> - 16.2.0-2
 - Rebuild for Python 3.6
 
