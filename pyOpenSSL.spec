@@ -35,7 +35,7 @@ High-level wrapper around a subset of the OpenSSL library, includes among others
 %package -n python2-pyOpenSSL
 Summary: Python 2 wrapper module around the OpenSSL library
 Requires: python-cryptography >= 1.3.0
-Obsoletes: pyOpenSSL < 16.0.0-3
+Obsoletes: pyOpenSSL < %{version}-%{release}
 Provides: pyOpenSSL = %{version}-%{release}
 %{?python_provide:%python_provide python2-pyOpenSSL}
 
@@ -106,6 +106,9 @@ rm doc/_build/html/.buildinfo
 %doc CHANGELOG.rst examples doc/_build/html
 
 %changelog
+* Fri Apr 28 2017 Tomáš Mráz <tmraz@redhat.com> - 16.2.0-4
+- Fix the obsolete version (needs to be in sync with Fedora 25) (#1446529)
+
 * Sat Feb 11 2017 Fedora Release Engineering <releng@fedoraproject.org> - 16.2.0-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
 
