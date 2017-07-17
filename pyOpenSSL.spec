@@ -4,10 +4,10 @@
 
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
-Version: 16.2.0
-Release: 4%{?dist}
-Source0: https://pypi.python.org/packages/source/p/pyOpenSSL/pyOpenSSL-%{version}.tar.gz
-#Source1: https://pypi.python.org/packages/source/p/pyOpenSSL/pyOpenSSL-%{version}.tar.gz.asc
+Version: 17.1.0
+Release: 1%{?dist}
+Source0: https://files.pythonhosted.org/packages/source/p/pyOpenSSL/pyOpenSSL-%{version}.tar.gz
+Source1: https://files.pythonhosted.org/packages/source/p/pyOpenSSL/pyOpenSSL-%{version}.tar.gz.asc
 
 BuildArch: noarch
 License: ASL 2.0
@@ -106,6 +106,9 @@ rm doc/_build/html/.buildinfo
 %doc CHANGELOG.rst examples doc/_build/html
 
 %changelog
+* Mon Jul 17 2017 Tomáš Mráz <tmraz@redhat.com> - 17.1.0-1
+- New upstream release 17.1.0.
+
 * Fri Apr 28 2017 Tomáš Mráz <tmraz@redhat.com> - 16.2.0-4
 - Fix the obsolete version (needs to be in sync with Fedora 25) (#1446529)
 
