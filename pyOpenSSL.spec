@@ -5,7 +5,7 @@
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
 Version: 17.1.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Source0: https://files.pythonhosted.org/packages/source/p/pyOpenSSL/pyOpenSSL-%{version}.tar.gz
 Source1: https://files.pythonhosted.org/packages/source/p/pyOpenSSL/pyOpenSSL-%{version}.tar.gz.asc
 
@@ -106,6 +106,9 @@ rm doc/_build/html/.buildinfo
 %doc CHANGELOG.rst examples doc/_build/html
 
 %changelog
+* Thu Jul 27 2017 Fedora Release Engineering <releng@fedoraproject.org> - 17.1.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
+
 * Mon Jul 17 2017 Tomáš Mráz <tmraz@redhat.com> - 17.1.0-1
 - New upstream release 17.1.0.
 
