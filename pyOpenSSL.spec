@@ -4,10 +4,13 @@
 
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
-Version: 17.1.0
-Release: 2%{?dist}
+Version: 17.2.0
+Release: 1%{?dist}
 Source0: https://files.pythonhosted.org/packages/source/p/pyOpenSSL/pyOpenSSL-%{version}.tar.gz
 Source1: https://files.pythonhosted.org/packages/source/p/pyOpenSSL/pyOpenSSL-%{version}.tar.gz.asc
+# A backport of https://github.com/pyca/pyopenssl/pull/690 which will be included
+# in the next pyOpenSSL release (17.3.0 or later).
+Patch0: Provide-a-destructor-for-the-CRL-object.patch
 
 BuildArch: noarch
 License: ASL 2.0
@@ -68,7 +71,7 @@ BuildArch: noarch
 Documentation for pyOpenSSL
 
 %prep
-%setup -q -n pyOpenSSL-%{version}
+%autosetup -p1 -n pyOpenSSL-%{version}
 
 %build
 %py2_build
@@ -106,6 +109,10 @@ rm doc/_build/html/.buildinfo
 %doc CHANGELOG.rst examples doc/_build/html
 
 %changelog
+* Fri Sep 08 2017 Jeremy Cline <jeremy@jcline.org> - 17.2.0-1
+- New upstream release 17.2.0
+- Backport a memory leak fix with CRLs (upstream PR #690).
+
 * Thu Jul 27 2017 Fedora Release Engineering <releng@fedoraproject.org> - 17.1.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
 
