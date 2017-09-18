@@ -4,13 +4,10 @@
 
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
-Version: 17.2.0
+Version: 17.3.0
 Release: 1%{?dist}
 Source0: https://files.pythonhosted.org/packages/source/p/pyOpenSSL/pyOpenSSL-%{version}.tar.gz
 Source1: https://files.pythonhosted.org/packages/source/p/pyOpenSSL/pyOpenSSL-%{version}.tar.gz.asc
-# A backport of https://github.com/pyca/pyopenssl/pull/690 which will be included
-# in the next pyOpenSSL release (17.3.0 or later).
-Patch0: Provide-a-destructor-for-the-CRL-object.patch
 
 BuildArch: noarch
 License: ASL 2.0
@@ -109,6 +106,10 @@ rm doc/_build/html/.buildinfo
 %doc CHANGELOG.rst examples doc/_build/html
 
 %changelog
+* Mon Sep 18 2017 Jeremy Cline <jeremy@jcline.org> - 17.3.0-1
+- New upstream release 17.2.0
+- Drop memory leak patch as it's in the 17.3.0 upstream release
+
 * Fri Sep 08 2017 Jeremy Cline <jeremy@jcline.org> - 17.2.0-1
 - New upstream release 17.2.0
 - Backport a memory leak fix with CRLs (upstream PR #690).
