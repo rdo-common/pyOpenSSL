@@ -1,18 +1,18 @@
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?rhel} >= 8
 %global with_python3 1
 %endif
 
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
 Version: 17.3.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Source0: https://files.pythonhosted.org/packages/source/p/pyOpenSSL/pyOpenSSL-%{version}.tar.gz
 Source1: https://files.pythonhosted.org/packages/source/p/pyOpenSSL/pyOpenSSL-%{version}.tar.gz.asc
 
 BuildArch: noarch
 License: ASL 2.0
 Group: Development/Libraries
-Url: https://pyopenssl.readthedocs.org/
+URL: https://pyopenssl.readthedocs.org/
 
 BuildRequires: python-setuptools
 BuildRequires: python-sphinx
@@ -106,6 +106,9 @@ rm doc/_build/html/.buildinfo
 %doc CHANGELOG.rst examples doc/_build/html
 
 %changelog
+* Wed Sep 27 2017 Troy Dawson <tdawson@redhat.com> - 17.3.0-2
+- Cleanup spec file conditionals
+
 * Mon Sep 18 2017 Jeremy Cline <jeremy@jcline.org> - 17.3.0-1
 - New upstream release 17.2.0
 - Drop memory leak patch as it's in the 17.3.0 upstream release
