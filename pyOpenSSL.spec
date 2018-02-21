@@ -5,7 +5,7 @@
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
 Version: 17.3.0
-Release: 3%{?dist}
+Release: 4%{?dist}
 Source0: https://files.pythonhosted.org/packages/source/p/pyOpenSSL/pyOpenSSL-%{version}.tar.gz
 Source1: https://files.pythonhosted.org/packages/source/p/pyOpenSSL/pyOpenSSL-%{version}.tar.gz.asc
 
@@ -14,12 +14,12 @@ License: ASL 2.0
 Group: Development/Libraries
 URL: https://pyopenssl.readthedocs.org/
 
-BuildRequires: python-setuptools
-BuildRequires: python-sphinx
-BuildRequires: python-sphinx_rtd_theme
+BuildRequires: python2-setuptools
+BuildRequires: python2-sphinx
+BuildRequires: python2-sphinx_rtd_theme
 
 BuildRequires: python2-devel
-BuildRequires: python-cryptography >= 1.3.0
+BuildRequires: python2-cryptography >= 1.3.0
 %if 0%{?with_python3}
 BuildRequires: python3-devel
 BuildRequires: python3-cryptography >= 1.3.0
@@ -34,7 +34,7 @@ High-level wrapper around a subset of the OpenSSL library, includes among others
 
 %package -n python2-pyOpenSSL
 Summary: Python 2 wrapper module around the OpenSSL library
-Requires: python-cryptography >= 1.3.0
+Requires: python2-cryptography >= 1.3.0
 Obsoletes: pyOpenSSL < %{version}-%{release}
 Provides: pyOpenSSL = %{version}-%{release}
 %{?python_provide:%python_provide python2-pyOpenSSL}
@@ -106,6 +106,10 @@ rm doc/_build/html/.buildinfo
 %doc CHANGELOG.rst examples doc/_build/html
 
 %changelog
+* Wed Feb 21 2018 Iryna Shcherbina <ishcherb@redhat.com> - 17.3.0-4
+- Update Python 2 dependency declarations to new packaging standards
+  (See https://fedoraproject.org/wiki/FinalizingFedoraSwitchtoPython3)
+
 * Fri Feb 09 2018 Fedora Release Engineering <releng@fedoraproject.org> - 17.3.0-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
 
