@@ -1,29 +1,31 @@
-%if 0%{?fedora} || 0%{?rhel} >= 8
-%global with_python3 1
+%if 0%{?fedora}
+%bcond_without python2
+%else
+# Disable python2 build by default
+%bcond_with python2
 %endif
 
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
-Version: 17.3.0
-Release: 4%{?dist}
+Version: 18.0.0
+Release: 1%{?dist}
 Source0: https://files.pythonhosted.org/packages/source/p/pyOpenSSL/pyOpenSSL-%{version}.tar.gz
-Source1: https://files.pythonhosted.org/packages/source/p/pyOpenSSL/pyOpenSSL-%{version}.tar.gz.asc
 
 BuildArch: noarch
 License: ASL 2.0
 Group: Development/Libraries
 URL: https://pyopenssl.readthedocs.org/
 
-BuildRequires: python2-setuptools
-BuildRequires: python2-sphinx
-BuildRequires: python2-sphinx_rtd_theme
+BuildRequires: python3-setuptools
+BuildRequires: python3-sphinx
+BuildRequires: python3-sphinx_rtd_theme
 
+%if %{with python2}
 BuildRequires: python2-devel
 BuildRequires: python2-cryptography >= 1.3.0
-%if 0%{?with_python3}
+%endif
 BuildRequires: python3-devel
 BuildRequires: python3-cryptography >= 1.3.0
-%endif
 
 %description
 High-level wrapper around a subset of the OpenSSL library, includes among others
@@ -32,6 +34,7 @@ High-level wrapper around a subset of the OpenSSL library, includes among others
  * Callbacks written in Python
  * Extensive error-handling mechanism, mirroring OpenSSL's error codes
 
+%if %{with python2}
 %package -n python2-pyOpenSSL
 Summary: Python 2 wrapper module around the OpenSSL library
 Requires: python2-cryptography >= 1.3.0
@@ -45,8 +48,8 @@ High-level wrapper around a subset of the OpenSSL library, includes among others
    sockets
  * Callbacks written in Python
  * Extensive error-handling mechanism, mirroring OpenSSL's error codes
+%endif
 
-%if 0%{?with_python3}
 %package -n python3-pyOpenSSL
 Summary: Python 3 wrapper module around the OpenSSL library
 Requires: python3-cryptography
@@ -58,7 +61,6 @@ High-level wrapper around a subset of the OpenSSL library, includes among others
    sockets
  * Callbacks written in Python
  * Extensive error-handling mechanism, mirroring OpenSSL's error codes
-%endif
 
 %package doc
 Summary: Documentation for pyOpenSSL
@@ -71,41 +73,44 @@ Documentation for pyOpenSSL
 %autosetup -p1 -n pyOpenSSL-%{version}
 
 %build
-%py2_build
-
-%if 0%{?with_python3}
 %py3_build
+
+%if %{with python2}
+%py2_build
 %endif
 
-%{__make} -C doc html
+%{__make} -C doc html SPHINXBUILD=sphinx-build-3
 
 %install
-%py2_install
-
-%if 0%{?with_python3}
 %py3_install
+
+%if %{with python2}
+%py2_install
 %endif
 
 # Cleanup sphinx .buildinfo file before packaging
 rm doc/_build/html/.buildinfo
 
+%if %{with python2}
 %files -n python2-pyOpenSSL
 %license LICENSE
 %{python_sitelib}/OpenSSL/
 %{python_sitelib}/pyOpenSSL-*.egg-info
+%endif
 
-%if 0%{?with_python3}
 %files -n python3-pyOpenSSL
 %license LICENSE
 %{python3_sitelib}/OpenSSL/
 %{python3_sitelib}/pyOpenSSL-*.egg-info
-%endif
 
 %files doc
 %license LICENSE
 %doc CHANGELOG.rst examples doc/_build/html
 
 %changelog
+* Mon Jun 11 2018 Tomáš Mráz <tmraz@redhat.com> - 18.0.0-1
+- New upstream release 18.0.0
+
 * Wed Feb 21 2018 Iryna Shcherbina <ishcherb@redhat.com> - 17.3.0-4
 - Update Python 2 dependency declarations to new packaging standards
   (See https://fedoraproject.org/wiki/FinalizingFedoraSwitchtoPython3)
