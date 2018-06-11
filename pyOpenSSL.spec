@@ -22,10 +22,10 @@ BuildRequires: python3-sphinx_rtd_theme
 
 %if %{with python2}
 BuildRequires: python2-devel
-BuildRequires: python2-cryptography >= 1.3.0
+BuildRequires: python2-cryptography >= 2.2.1
 %endif
 BuildRequires: python3-devel
-BuildRequires: python3-cryptography >= 1.3.0
+BuildRequires: python3-cryptography >= 2.2.1
 
 %description
 High-level wrapper around a subset of the OpenSSL library, includes among others
@@ -37,7 +37,7 @@ High-level wrapper around a subset of the OpenSSL library, includes among others
 %if %{with python2}
 %package -n python2-pyOpenSSL
 Summary: Python 2 wrapper module around the OpenSSL library
-Requires: python2-cryptography >= 1.3.0
+Requires: python2-cryptography >= 2.2.1
 Obsoletes: pyOpenSSL < %{version}-%{release}
 Provides: pyOpenSSL = %{version}-%{release}
 %{?python_provide:%python_provide python2-pyOpenSSL}
@@ -52,7 +52,7 @@ High-level wrapper around a subset of the OpenSSL library, includes among others
 
 %package -n python3-pyOpenSSL
 Summary: Python 3 wrapper module around the OpenSSL library
-Requires: python3-cryptography
+Requires: python3-cryptography >= 2.2.1
 %{?python_provide:%python_provide python3-pyOpenSSL}
 
 %description -n python3-pyOpenSSL
