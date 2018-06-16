@@ -8,7 +8,7 @@
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
 Version: 18.0.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Source0: https://files.pythonhosted.org/packages/source/p/pyOpenSSL/pyOpenSSL-%{version}.tar.gz
 
 BuildArch: noarch
@@ -108,6 +108,9 @@ rm doc/_build/html/.buildinfo
 %doc CHANGELOG.rst examples doc/_build/html
 
 %changelog
+* Sat Jun 16 2018 Miro Hrončok <mhroncok@redhat.com> - 18.0.0-2
+- Rebuilt for Python 3.7
+
 * Mon Jun 11 2018 Tomáš Mráz <tmraz@redhat.com> - 18.0.0-1
 - New upstream release 18.0.0
 
