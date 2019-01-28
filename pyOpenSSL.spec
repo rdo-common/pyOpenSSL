@@ -13,7 +13,6 @@ Source0: https://files.pythonhosted.org/packages/source/p/pyOpenSSL/pyOpenSSL-%{
 
 BuildArch: noarch
 License: ASL 2.0
-Group: Development/Libraries
 URL: https://pyopenssl.readthedocs.org/
 
 BuildRequires: python3-setuptools
