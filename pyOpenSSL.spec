@@ -8,7 +8,7 @@
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
 Version: 18.0.0
-Release: 3%{?dist}
+Release: 4%{?dist}
 Source0: https://files.pythonhosted.org/packages/source/p/pyOpenSSL/pyOpenSSL-%{version}.tar.gz
 
 BuildArch: noarch
@@ -107,6 +107,9 @@ rm doc/_build/html/.buildinfo
 %doc CHANGELOG.rst examples doc/_build/html
 
 %changelog
+* Sat Feb 02 2019 Fedora Release Engineering <releng@fedoraproject.org> - 18.0.0-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
+
 * Fri Jul 13 2018 Fedora Release Engineering <releng@fedoraproject.org> - 18.0.0-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
 
