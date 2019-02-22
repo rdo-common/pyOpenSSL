@@ -5,6 +5,12 @@
 %bcond_with python2
 %endif
 
+# In CentOS7 enable python2 and disable python3
+%if 0%{?rhel} == 7
+%bcond_without python2
+%bcond_with python2
+%endif
+
 Summary: Python wrapper module around the OpenSSL library
 Name: pyOpenSSL
 Version: 19.0.0
@@ -15,16 +21,25 @@ BuildArch: noarch
 License: ASL 2.0
 URL: https://pyopenssl.readthedocs.org/
 
+%if %{with python3}
 BuildRequires: python3-setuptools
 BuildRequires: python3-sphinx
 BuildRequires: python3-sphinx_rtd_theme
+%endif
+%if %{with python2}
+BuildRequires: python2-setuptools
+BuildRequires: python2-sphinx
+BuildRequires: python2-sphinx_rtd_theme
+%endif
 
 %if %{with python2}
 BuildRequires: python2-devel
 BuildRequires: python2-cryptography >= 2.2.1
 %endif
+%if %{with python3}
 BuildRequires: python3-devel
 BuildRequires: python3-cryptography >= 2.2.1
+%endif
 
 %description
 High-level wrapper around a subset of the OpenSSL library, includes among others
@@ -50,6 +65,7 @@ High-level wrapper around a subset of the OpenSSL library, includes among others
  * Extensive error-handling mechanism, mirroring OpenSSL's error codes
 %endif
 
+%if %{with python3}
 %package -n python3-pyOpenSSL
 Summary: Python 3 wrapper module around the OpenSSL library
 Requires: python3-cryptography >= 2.2.1
@@ -62,6 +78,7 @@ High-level wrapper around a subset of the OpenSSL library, includes among others
    sockets
  * Callbacks written in Python
  * Extensive error-handling mechanism, mirroring OpenSSL's error codes
+%endif
 
 %package doc
 Summary: Documentation for pyOpenSSL
@@ -74,16 +91,21 @@ Documentation for pyOpenSSL
 %autosetup -p1 -n pyOpenSSL-%{version}
 
 %build
+%if %{with python3}
 %py3_build
+%{__make} -C doc html SPHINXBUILD=sphinx-build-3
+%endif
 
 %if %{with python2}
 %py2_build
+%{__make} -C doc html SPHINXBUILD=sphinx-build
 %endif
 
-%{__make} -C doc html SPHINXBUILD=sphinx-build-3
 
 %install
+%if %{with python3}
 %py3_install
+%endif
 
 %if %{with python2}
 %py2_install
@@ -99,10 +121,12 @@ rm doc/_build/html/.buildinfo
 %{python2_sitelib}/pyOpenSSL-*.egg-info
 %endif
 
+%if %{with python3}
 %files -n python3-pyOpenSSL
 %license LICENSE
 %{python3_sitelib}/OpenSSL/
 %{python3_sitelib}/pyOpenSSL-*.egg-info
+%endif
 
 %files doc
 %license LICENSE
